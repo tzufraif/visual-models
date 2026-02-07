@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>הכנסות נלוות ממלונות - מצגת למנכ״ל</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Heebo',system-ui,-apple-system,sans-serif;background:#f7fafc;color:#1a365d;direction:rtl}
+
+/* ===== VARIABLES ===== */
+:root{
+  --navy:#1a365d;--blue:#3182ce;--sky:#ebf8ff;--sky2:#bee3f8;
+  --orange:#ed8936;--orange-bg:#fffaf0;--orange-border:#fbd38d;
+  --red:#e53e3e;--red-bg:#fff5f5;--red-border:#feb2b2;
+  --green:#38a169;--green-bg:#f0fff4;
+  --gray100:#f7fafc;--gray200:#edf2f7;--gray300:#e2e8f0;--gray400:#cbd5e0;--gray500:#a0aec0;--gray600:#718096;--gray700:#4a5568;
+  --radius:12px;--shadow:0 4px 16px rgba(26,54,93,.08);--shadow-lg:0 8px 30px rgba(26,54,93,.12);
+  --transition:0.3s cubic-bezier(.4,0,.2,1);
+}
+
+/* ===== LAYOUT ===== */
+.app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* ===== HEADER ===== */
+.header{
+  background:linear-gradient(135deg,var(--navy) 0%,#2a4a7f 100%);
+  color:white;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 2px 12px rgba(26,54,93,.2);position:relative;z-index:10;flex-shrink:0;
+}
+.header h1{font-size:1.3rem;font-weight:700;letter-spacing:-.02em}
+.header-sub{font-size:.82rem;opacity:.7;font-weight:300;margin-top:2px}
+
+/* ===== TOP TABS ===== */
+.top-tabs{display:flex;gap:4px;background:rgba(255,255,255,.12);border-radius:8px;padding:3px}
+.top-tab{
+  padding:8px 22px;border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:500;
+  color:rgba(255,255,255,.7);transition:var(--transition);border:none;background:none;font-family:inherit;
+}
+.top-tab:hover{color:white;background:rgba(255,255,255,.08)}
+.top-tab.active{background:rgba(255,255,255,.2);color:white;font-weight:600}
+
+/* ===== MAIN CONTENT ===== */
+.main{flex:1;overflow:hidden;position:relative}
+
+/* ===== SECTIONS ===== */
+.section{
+  position:absolute;inset:0;opacity:0;visibility:hidden;
+  transition:opacity .4s ease,visibility .4s ease;
+  display:flex;flex-direction:column;
+}
+.section.active{opacity:1;visibility:visible}
+
+/* =============== SECTION 1: MODELS =============== */
+.models-layout{display:flex;flex:1;overflow:hidden}
+
+/* Sidebar */
+.model-sidebar{
+  width:200px;background:white;border-left:1px solid var(--gray200);
+  display:flex;flex-direction:column;padding:16px 12px;gap:6px;flex-shrink:0;
+}
+.model-tab{
+  padding:14px 16px;border-radius:var(--radius);cursor:pointer;
+  transition:var(--transition);border:2px solid transparent;text-align:right;
+  background:none;font-family:inherit;
+}
+.model-tab:hover{background:var(--sky);border-color:var(--sky2)}
+.model-tab.active{background:var(--sky);border-color:var(--blue);box-shadow:var(--shadow)}
+.model-tab-num{font-size:.7rem;color:var(--gray500);font-weight:600;letter-spacing:.05em;margin-bottom:4px}
+.model-tab-name{font-size:.9rem;font-weight:600;color:var(--navy);line-height:1.3}
+.model-tab-sub{font-size:.72rem;color:var(--gray600);margin-top:3px}
+
+/* Model Content */
+.model-content{flex:1;overflow-y:auto;padding:20px 28px 12px;position:relative}
+.model-panel{
+  position:absolute;inset:0;padding:20px 28px 12px;opacity:0;visibility:hidden;
+  transition:opacity .35s ease,transform .35s ease;transform:translateX(-12px);
+  overflow-y:auto;
+}
+.model-panel.active{opacity:1;visibility:visible;transform:translateX(0)}
+
+/* Model Title */
+.model-title{font-size:1.15rem;font-weight:700;color:var(--navy);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.model-title-badge{
+  font-size:.65rem;padding:3px 10px;border-radius:20px;font-weight:600;
+  background:var(--sky);color:var(--blue);
+}
+
+/* Value Chain */
+.value-chain{display:flex;align-items:center;gap:0;margin-bottom:18px;direction:rtl}
+.vc-step{
+  flex:1;background:white;border:2px solid var(--gray200);border-radius:var(--radius);
+  padding:14px 12px;text-align:center;transition:var(--transition);position:relative;
+  min-height:100px;display:flex;flex-direction:column;justify-content:center;
+}
+.vc-step:hover{border-color:var(--blue);box-shadow:var(--shadow);transform:translateY(-2px)}
+.vc-step-num{
+  position:absolute;top:-10px;right:12px;background:var(--blue);color:white;
+  width:22px;height:22px;border-radius:50%;font-size:.7rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.vc-step-title{font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.vc-step-desc{font-size:.7rem;color:var(--gray600);line-height:1.4}
+.vc-arrow{
+  width:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  color:var(--blue);font-size:1.1rem;opacity:.6;
+}
+.vc-arrow svg{width:24px;height:24px}
+
+/* Take Rate Badge */
+.take-rate{
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,#ebf8ff,#bee3f8);border:1.5px solid var(--blue);
+  border-radius:8px;padding:5px 14px;margin-bottom:14px;
+}
+.take-rate-label{font-size:.72rem;color:var(--gray600);font-weight:500}
+.take-rate-value{font-size:.95rem;font-weight:800;color:var(--navy);letter-spacing:-.02em}
+
+/* Info Cards */
+.info-cards{display:flex;gap:14px;margin-bottom:14px}
+.info-card{
+  flex:1;border-radius:var(--radius);padding:0;overflow:hidden;
+  border:1.5px solid;transition:var(--transition);
+}
+.info-card:hover{box-shadow:var(--shadow)}
+.info-card.risk{border-color:var(--orange-border)}
+.info-card.cancel{border-color:var(--red-border)}
+.info-card.cancel.medium{border-color:var(--orange-border)}
+.info-card.cancel.mixed{border-color:var(--sky2)}
+.info-card-header{
+  display:flex;align-items:center;gap:8px;padding:10px 16px;
+}
+.info-card.risk .info-card-header{background:linear-gradient(135deg,#ed8936,#dd6b20);color:white}
+.info-card.cancel .info-card-header{background:linear-gradient(135deg,#e53e3e,#c53030);color:white}
+.info-card.cancel.medium .info-card-header{background:linear-gradient(135deg,#ed8936,#dd6b20);color:white}
+.info-card.cancel.mixed .info-card-header{background:linear-gradient(135deg,#3182ce,#2b6cb0);color:white}
+.info-card-icon{font-size:1rem;opacity:.9}
+.info-card-title{font-size:.8rem;font-weight:700}
+.info-card-severity{font-size:.65rem;font-weight:600;margin-right:auto;
+  background:rgba(255,255,255,.25);padding:2px 8px;border-radius:10px;
+}
+.info-card-body{padding:10px 16px;font-size:.75rem;color:var(--gray700);line-height:1.6;
+  background:white;
+}
+.info-card.risk .info-card-body{background:var(--orange-bg)}
+.info-card.cancel .info-card-body{background:var(--red-bg)}
+.info-card.cancel.medium .info-card-body{background:var(--orange-bg)}
+.info-card.cancel.mixed .info-card-body{background:var(--sky)}
+.info-card-body ul{padding-right:16px;margin:0}
+.info-card-body li{margin-bottom:3px}
+.info-card-body li::marker{color:var(--gray400)}
+/* Cancel flow mini-diagram */
+.cancel-flow{
+  display:flex;align-items:center;gap:0;margin-top:8px;padding:8px 0 2px;
+  border-top:1px dashed var(--gray300);
+}
+.cancel-flow-step{
+  flex:1;text-align:center;font-size:.62rem;font-weight:600;color:var(--gray600);
+  position:relative;
+}
+.cancel-flow-step .cf-icon{font-size:.85rem;display:block;margin-bottom:2px}
+.cancel-flow-arrow{width:20px;flex-shrink:0;text-align:center;color:var(--gray400);font-size:.65rem}
+
+/* Comparison Bar */
+.comparison-bar{
+  background:white;border-top:1px solid var(--gray200);padding:10px 24px;
+  display:flex;align-items:stretch;gap:12px;flex-shrink:0;
+  box-shadow:0 -2px 12px rgba(26,54,93,.04);
+}
+.cb-metric{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  padding:6px 8px;border-radius:8px;transition:var(--transition);
+}
+.cb-metric-label{font-size:.68rem;color:var(--gray500);font-weight:600;margin-bottom:6px;text-align:center}
+.cb-bars{display:flex;align-items:flex-end;gap:6px;height:32px}
+.cb-bar{
+  width:28px;border-radius:4px 4px 0 0;transition:var(--transition);position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+}
+.cb-bar-fill{
+  width:100%;border-radius:4px 4px 0 0;transition:height .4s ease,background .3s ease;
+}
+.cb-bar-label{
+  font-size:.55rem;color:var(--gray500);margin-top:3px;white-space:nowrap;font-weight:500;
+  text-align:center;
+}
+.cb-bar.active .cb-bar-label{color:var(--navy);font-weight:700}
+.cb-bar.active .cb-bar-fill{box-shadow:0 0 0 2px rgba(49,130,206,.3)}
+
+/* =============== SECTION 2: JOURNEYS =============== */
+.journeys-layout{display:flex;flex-direction:column;flex:1;overflow:hidden}
+
+/* Journey Tabs */
+.journey-tabs{
+  display:flex;gap:8px;padding:14px 28px 10px;background:white;
+  border-bottom:1px solid var(--gray200);flex-shrink:0;flex-wrap:wrap;
+}
+.journey-tab{
+  padding:10px 20px;border-radius:var(--radius);cursor:pointer;
+  border:2px solid var(--gray200);background:white;
+  transition:var(--transition);font-family:inherit;text-align:right;
+}
+.journey-tab:hover{border-color:var(--blue);background:var(--sky)}
+.journey-tab.active{border-color:var(--blue);background:var(--sky);box-shadow:var(--shadow)}
+.journey-tab-name{font-size:.85rem;font-weight:600;color:var(--navy)}
+.journey-tab-sub{font-size:.68rem;color:var(--gray600);margin-top:2px}
+
+/* Journey Content */
+.journey-content{flex:1;display:flex;overflow:hidden}
+.journey-svg-area{flex:1;position:relative;overflow:hidden}
+.journey-svg-area svg{width:100%;height:100%}
+.journey-desc-panel{
+  width:260px;background:white;border-right:1px solid var(--gray200);
+  padding:20px 18px;overflow-y:auto;flex-shrink:0;
+}
+.journey-desc-title{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:10px}
+.journey-desc-text{font-size:.8rem;color:var(--gray700);line-height:1.7;margin-bottom:14px}
+.journey-desc-steps{list-style:none;padding:0}
+.journey-desc-steps li{
+  padding:5px 10px 5px 0;border-bottom:1px solid var(--gray200);
+  font-size:.72rem;color:var(--gray700);display:flex;align-items:flex-start;gap:6px;
+}
+.journey-desc-steps li:last-child{border-bottom:none}
+.step-num{
+  width:18px;height:18px;border-radius:50%;background:var(--blue);color:white;
+  font-size:.6rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  margin-top:1px;
+}
+
+/* ===== SVG STYLES ===== */
+.svg-node{cursor:pointer;transition:var(--transition)}
+.svg-node:hover .node-circle{filter:drop-shadow(0 0 8px rgba(49,130,206,.4))}
+.node-circle{transition:var(--transition)}
+
+/* Animations */
+@keyframes pulse{
+  0%,100%{opacity:1;r:36}
+  50%{opacity:.5;r:40}
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes nodePopIn{
+  0%{transform:scale(0);opacity:0}
+  60%{transform:scale(1.15);opacity:1}
+  100%{transform:scale(1);opacity:1}
+}
+@keyframes drawPath{
+  from{stroke-dashoffset:var(--path-length)}
+  to{stroke-dashoffset:0}
+}
+
+.ai-hub-pulse{animation:pulse 2.5s ease-in-out infinite}
+
+/* Fullscreen */
+.app.fullscreen{position:fixed;inset:0;z-index:99999;background:var(--gray100)}
+
+/* ===== KEYBOARD HINT ===== */
+.kbd-hint{
+  position:fixed;bottom:10px;left:10px;font-size:.6rem;color:var(--gray400);
+  background:white;padding:4px 10px;border-radius:6px;border:1px solid var(--gray200);z-index:100;
+  direction:ltr;
+}
+.kbd-hint kbd{
+  background:var(--gray200);padding:1px 5px;border-radius:3px;font-family:inherit;
+  font-size:.58rem;border:1px solid var(--gray300);
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <!-- HEADER -->
+  <header class="header">
+    <div>
+      <h1>ניתוח שרשרת ערך: מודלים להזמנת מלונות בתעופה</h1>
+      <div class="header-sub">משווה אסטרטגיות הכנסה נלוות עבור חוויית לקוח מובילה</div>
+    </div>
+    <div class="top-tabs" id="topTabs">
+      <button class="top-tab active" data-section="models">שרשרת ערך - מודלים</button>
+      <button class="top-tab" data-section="journeys">מסעות לקוח - AI</button>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- SECTION 1: MODELS -->
+    <div class="section active" id="sec-models">
+      <div class="models-layout">
+        <div class="model-sidebar" id="modelSidebar">
+          <div class="model-tab active" data-model="0">
+            <div class="model-tab-num">מודל 1</div>
+            <div class="model-tab-name">מיקור ישיר</div>
+            <div class="model-tab-sub">Direct Sourcing</div>
+          </div>
+          <div class="model-tab" data-model="1">
+            <div class="model-tab-num">מודל 2</div>
+            <div class="model-tab-name">ממשק צד שלישי</div>
+            <div class="model-tab-sub">Third Party API</div>
+          </div>
+          <div class="model-tab" data-model="2">
+            <div class="model-tab-num">מודל 3</div>
+            <div class="model-tab-name">ממשק ישיר</div>
+            <div class="model-tab-sub">Direct API</div>
+          </div>
+        </div>
+
+        <div class="model-content" id="modelContent">
+          <!-- Panel 0: Direct Sourcing -->
+          <div class="model-panel active" data-panel="0">
+            <div class="model-title">
+              מיקור ישיר (Direct Sourcing)
+              <span class="model-title-badge">הסכם ישיר עם מלונות</span>
+            </div>
+            <div class="take-rate">
+              <span class="take-rate-label">Take Rate משוער:</span>
+              <span class="take-rate-value">10%-20%</span>
+            </div>
+            <div class="value-chain">
+              <div class="vc-step">
+                <div class="vc-step-num">1</div>
+                <div class="vc-step-title">משא ומתן ישיר</div>
+                <div class="vc-step-desc">התקשרות והסכמי תמחור עם רשתות מלונות</div>
+              </div>
+              <div class="vc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M5 12l6-6M5 12l6 6"/></svg></div>
+              <div class="vc-step">
+                <div class="vc-step-num">2</div>
+                <div class="vc-step-title">ניהול מלאי</div>
+                <div class="vc-step-desc">שיבוץ חדרים, תמחור דינמי וניהול זמינות</div>
+              </div>
+              <div class="vc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M5 12l6-6M5 12l6 6"/></svg></div>
+              <div class="vc-step">
+                <div class="vc-step-num">3</div>
+                <div class="vc-step-title">הצגה ומכירה</div>
+                <div class="vc-step-desc">שילוב בתהליך הזמנת טיסה באתר ובאפליקציה</div>
+              </div>
+              <div class="vc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M5 12l6-6M5 12l6 6"/></svg></div>
+              <div class="vc-step">
+                <div class="vc-step-num">4</div>
+                <div class="vc-step-title">שירות לקוחות</div>
+                <div class="vc-step-desc">ניהול שינויים, ביטולים ותמיכה מלאה</div>
+              </div>
+            </div>
+            <div class="info-cards">
+              <div class="info-card risk">
+                <div class="info-card-header">
+                  <span class="info-card-icon">⚠</span>
+                  <span class="info-card-title">סיכונים עיקריים</span>
+                </div>
+                <div class="info-card-body">
+                  <ul>
+                    <li>דורש מומחיות תפעולית בתחום המלונאות</li>
+                    <li>חשיפה פיננסית ישירה - המלאי שייך לחברה</li>
+                    <li>ניהול מלאי וזמינות מורכב</li>
+                    <li>עלויות הקמה והפעלה גבוהות</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="info-card cancel">
+                <div class="info-card-header">
+                  <span class="info-card-icon">✕</span>
+                  <span class="info-card-title">תרחיש ביטולים</span>
+                  <span class="info-card-severity">חומרה גבוהה</span>
+                </div>
+                <div class="info-card-body">
+                  <ul>
+                    <li>אחריות מלאה להחזרים כספיים</li>
+                    <li>סיכון Chargeback ישירות על החברה</li>
+                    <li>צורך במדיניות ביטולים עצמאית</li>
+                    <li>ניהול סכסוכים מול מלונות ולקוחות</li>
+                  </ul>
+                  <div class="cancel-flow">
+                    <div class="cancel-flow-step"><span class="cf-icon">👤</span>לקוח מבטל</div>
+                    <div class="cancel-flow-arrow">←</div>
+                    <div class="cancel-flow-step"><span class="cf-icon">✈</span>החברה מטפלת</div>
+                    <div class="cancel-flow-arrow">←</div>
+                    <div class="cancel-flow-step"><span class="cf-icon">🏨</span>ביטול מול מלון</div>
+                    <div class="cancel-flow-arrow">←</div>
+                    <div class="cancel-flow-step"><span class="cf-icon">💸</span>החזר מהחברה</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 1: Third Party API -->
+          <div class="model-panel" data-panel="1">
+            <div class="model-title">
+              ממשק צד שלישי
+              <span class="model-title-badge">אגרגטור חיצוני</span>
+            </div>
+            <div class="take-rate">
+              <span class="take-rate-label">Take Rate משוער:</span>
+              <span class="take-rate-value">5%-15%</span>
+            </div>
+            <div class="value-chain">
+              <div class="vc-step">
+                <div class="vc-step-num">1</div>
+                <div class="vc-step-title">חיבור API</div>
+                <div class="vc-step-desc">אינטגרציה עם ממשק ספק צד שלישי</div>
+              </div>
+              <div class="vc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M5 12l6-6M5 12l6 6"/></svg></div>
+              <div class="vc-step">
+                <div class="vc-step-num">2</div>
+                <div class="vc-step-title">תצוגת תוצאות</div>
+                <div class="vc-step-desc">הצגת מלונות מהספק עם מיתוג של חברת התעופה</div>
+              </div>
+              <div class="vc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M5 12l6-6M5 12l6 6"/></svg></div>
+              <div class="vc-step">
+                <div class="vc-step-num">3</div>
+                <div class="vc-step-title">העברת הזמנה</div>
+                <div class="vc-step-desc">ביצוע ההזמנה דרך הספק, עמלה לכל עסקה</div>
+              </div>
+              <div class="vc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M5 12l6-6M5 12l6 6"/></svg></div>
+              <div class="vc-step">
+                <div class="vc-step-num">4</div>
+                <div class="vc-step-title">תמיכה משותפת</div>
+                <div class="vc-step-desc">שירות לקוחות מנוהל בין הספק לחברה</div>
+              </div>
+            </div>
+            <div class="info-cards">
+              <div class="info-card risk">
+                <div class="info-card-header">
+                  <span class="info-card-icon">⚠</span>
+                  <span class="info-card-title">סיכונים עיקריים</span>
+                </div>
+                <div class="info-card-body">
+                  <ul>
+                    <li>תלות בספק צד שלישי - אין שליטה על זמינות</li>
+                    <li>שליטה מוגבלת בתמחור ומרווחים</li>
+                    <li>חוויית לקוח לא אחידה</li>
+                    <li>מגבלות בהתאמה אישית ומיתוג</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="info-card cancel medium">
+                <div class="info-card-header">
+                  <span class="info-card-icon">✕</span>
+                  <span class="info-card-title">תרחיש ביטולים</span>
+                  <span class="info-card-severity">חומרה בינונית</span>
+                </div>
+                <div class="info-card-body">
+                  <ul>
+                    <li>הספק מטפל בביטולים והחזרים</li>
+                    <li>חברת התעופה כמתווכת בלבד</li>
+                    <li>פחות שליטה בתהליך הביטול</li>
+                    <li>סיכון למוניטין אם הספק מאכזב</li>
+                  </ul>
+                  <div class="cancel-flow">
+                    <div class="cancel-flow-step"><span class="cf-icon">👤</span>לקוח מבטל</div>
+                    <div class="cancel-flow-arrow">←</div>
+                    <div class="cancel-flow-step"><span class="cf-icon">✈</span>החברה מעבירה</div>
+                    <div class="cancel-flow-arrow">←</div>
+                    <div class="cancel-flow-step"><span class="cf-icon">🔗</span>ספק מטפל</div>
+                    <div class="cancel-flow-arrow">←</div>
+                    <div class="cancel-flow-step"><span class="cf-icon">💸</span>החזר מהספק</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 2: Direct API -->
+          <div class="model-panel" data-panel="2">
+            <div class="model-title">
+              ממשק ישיר (Direct API)
+              <span class="model-title-badge">קישוריות ישירה</span>
+            </div>
+            <div class="take-rate">
+              <span class="take-rate-label">Take Rate משוער:</span>
+              <span class="take-rate-value">5%-15%</span>
+            </div>
+            <div class="value-chain">
+              <div class="vc-step">
+                <div class="vc-step-num">1</div>
+                <div class="vc-step-title">פיתוח ממשקים</div>
+                <div class="vc-step-desc">בניית APIs ישירים מול רשתות מלונות ומערכות הזמנה</div>
+              </div>
+              <div class="vc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M5 12l6-6M5 12l6 6"/></svg></div>
+              <div class="vc-step">
+                <div class="vc-step-num">2</div>
+                <div class="vc-step-title">אגרגציה חכמה</div>
+                <div class="vc-step-desc">איחוד מקורות מידע, השוואת מחירים ובחירת ההצעה הטובה</div>
+              </div>
+              <div class="vc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M5 12l6-6M5 12l6 6"/></svg></div>
+              <div class="vc-step">
+                <div class="vc-step-num">3</div>
+                <div class="vc-step-title">הזמנה ישירה</div>
+                <div class="vc-step-desc">ביצוע הזמנה ישירות מול המלון, שליטה מלאה בתהליך</div>
+              </div>
+              <div class="vc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M5 12l6-6M5 12l6 6"/></svg></div>
+              <div class="vc-step">
+                <div class="vc-step-num">4</div>
+                <div class="vc-step-title">ניהול מפוצל</div>
+                <div class="vc-step-desc">שירות ותמיכה לפי ספק, ניהול מדיניות ביטולים מותאמת</div>
+              </div>
+            </div>
+            <div class="info-cards">
+              <div class="info-card risk">
+                <div class="info-card-header">
+                  <span class="info-card-icon">⚠</span>
+                  <span class="info-card-title">סיכונים עיקריים</span>
+                </div>
+                <div class="info-card-body">
+                  <ul>
+                    <li>מורכבות טכנית - ניהול ממשקים מרובים</li>
+                    <li>תחזוקה שוטפת ושינויי API בלתי צפויים</li>
+                    <li>אמינות תלויה בכל ספק בנפרד</li>
+                    <li>השקעה ראשונית גבוהה בפיתוח</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="info-card cancel mixed">
+                <div class="info-card-header">
+                  <span class="info-card-icon">✕</span>
+                  <span class="info-card-title">תרחיש ביטולים</span>
+                  <span class="info-card-severity">חומרה משתנה</span>
+                </div>
+                <div class="info-card-body">
+                  <ul>
+                    <li>תלוי בתנאי כל ספק בנפרד</li>
+                    <li>גמישות במדיניות ביטולים</li>
+                    <li>אפשרות לניתוב חכם לספקים גמישים</li>
+                    <li>מורכבות בניהול מדיניות אחידה</li>
+                  </ul>
+                  <div class="cancel-flow">
+                    <div class="cancel-flow-step"><span class="cf-icon">👤</span>לקוח מבטל</div>
+                    <div class="cancel-flow-arrow">←</div>
+                    <div class="cancel-flow-step"><span class="cf-icon">✈</span>החברה מנתבת</div>
+                    <div class="cancel-flow-arrow">←</div>
+                    <div class="cancel-flow-step"><span class="cf-icon">🏨</span>ספק A / B / C</div>
+                    <div class="cancel-flow-arrow">←</div>
+                    <div class="cancel-flow-step"><span class="cf-icon">💸</span>החזר לפי מדיניות</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparison Bar -->
+      <div class="comparison-bar" id="comparisonBar">
+        <div class="cb-metric" data-metric="tech">
+          <div class="cb-metric-label">מורכבות טכנית</div>
+          <div class="cb-bars">
+            <div class="cb-bar" data-model="0"><div class="cb-bar-fill"></div><div class="cb-bar-label">ישיר</div></div>
+            <div class="cb-bar" data-model="1"><div class="cb-bar-fill"></div><div class="cb-bar-label">צד ג׳</div></div>
+            <div class="cb-bar" data-model="2"><div class="cb-bar-fill"></div><div class="cb-bar-label">API</div></div>
+          </div>
+        </div>
+        <div class="cb-metric" data-metric="pricing">
+          <div class="cb-metric-label">שליטה בתמחור</div>
+          <div class="cb-bars">
+            <div class="cb-bar" data-model="0"><div class="cb-bar-fill"></div><div class="cb-bar-label">ישיר</div></div>
+            <div class="cb-bar" data-model="1"><div class="cb-bar-fill"></div><div class="cb-bar-label">צד ג׳</div></div>
+            <div class="cb-bar" data-model="2"><div class="cb-bar-fill"></div><div class="cb-bar-label">API</div></div>
+          </div>
+        </div>
+        <div class="cb-metric" data-metric="financial">
+          <div class="cb-metric-label">סיכון פיננסי</div>
+          <div class="cb-bars">
+            <div class="cb-bar" data-model="0"><div class="cb-bar-fill"></div><div class="cb-bar-label">ישיר</div></div>
+            <div class="cb-bar" data-model="1"><div class="cb-bar-fill"></div><div class="cb-bar-label">צד ג׳</div></div>
+            <div class="cb-bar" data-model="2"><div class="cb-bar-fill"></div><div class="cb-bar-label">API</div></div>
+          </div>
+        </div>
+        <div class="cb-metric" data-metric="ttl">
+          <div class="cb-metric-label">זמן להשקה</div>
+          <div class="cb-bars">
+            <div class="cb-bar" data-model="0"><div class="cb-bar-fill"></div><div class="cb-bar-label">ישיר</div></div>
+            <div class="cb-bar" data-model="1"><div class="cb-bar-fill"></div><div class="cb-bar-label">צד ג׳</div></div>
+            <div class="cb-bar" data-model="2"><div class="cb-bar-fill"></div><div class="cb-bar-label">API</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: JOURNEYS -->
+    <div class="section" id="sec-journeys">
+      <div class="journeys-layout">
+        <div class="journey-tabs" id="journeyTabs">
+          <button class="journey-tab active" data-journey="0">
+            <div class="journey-tab-name">חבילה משולבת</div>
+            <div class="journey-tab-sub">Bundle from Start</div>
+          </button>
+          <button class="journey-tab" data-journey="1">
+            <div class="journey-tab-name">הצעה בשיחה</div>
+            <div class="journey-tab-sub">Conversational Offering</div>
+          </button>
+          <button class="journey-tab" data-journey="2">
+            <div class="journey-tab-name">הודעת WhatsApp</div>
+            <div class="journey-tab-sub">Post-checkout WhatsApp</div>
+          </button>
+          <button class="journey-tab" data-journey="3">
+            <div class="journey-tab-name">תזכורת לפני הטיסה</div>
+            <div class="journey-tab-sub">Pre-trip Reminder</div>
+          </button>
+        </div>
+        <div class="journey-content">
+          <div class="journey-svg-area" id="journeySvgArea">
+            <svg id="journeySvg" viewBox="0 0 840 400" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+          <div class="journey-desc-panel" id="journeyDescPanel"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Keyboard hint -->
+  <div class="kbd-hint">
+    <kbd>←</kbd><kbd>→</kbd> Navigate &nbsp; <kbd>F</kbd> Fullscreen
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  // ===== STATE =====
+  let currentSection = 'models';
+  let currentModel = 0;
+  let currentJourney = 0;
+
+  // ===== DATA =====
+  // Comparison bar: metric values per model (1-3 dots filled)
+  // [model0, model1, model2]
+  const metrics = {
+    tech:      [2, 1, 3], // tech complexity
+    pricing:   [3, 1, 2], // pricing control
+    financial: [3, 1, 2], // financial risk
+    ttl:       [3, 1, 2], // time to launch (higher = slower)
+  };
+
+  const journeyData = [
+    {
+      id: 'bundle',
+      title: 'חבילה משולבת',
+      subtitle: 'Bundle from Start',
+      desc: 'הלקוח מחפש טיסה ומקבל מיד הצעה משולבת לטיסה + מלון. ה-AI מזהה את יעד הנסיעה ומציע חבילות מותאמות כבר בשלב החיפוש הראשוני.',
+      steps: [
+        'כניסה לאתר / אפליקציה',
+        'חיפוש טיסה - יעד ותאריכים',
+        'בחירת יעד ותאריכים',
+        'AI מזהה הזדמנות לחבילה',
+        'הצגת חבילות טיסה+מלון',
+        'בחירת חדר מלון',
+        'תשלום משולב',
+        'אישור הזמנה אחוד',
+        'צ׳ק-אין לטיסה',
+        'כניסה למלון'
+      ],
+      nodes: [
+        { x: 750, y: 70,  label: 'כניסה לאתר',      icon: '🌐' },
+        { x: 640, y: 70,  label: 'חיפוש טיסה',       icon: '🔍' },
+        { x: 530, y: 70,  label: 'בחירת יעד',        icon: '✈' },
+        { x: 420, y: 140, label: 'המלצת AI',         icon: '🤖', isHub: true, hubDetails: ['השוואת מחירים','התאמה אישית','ביקורות'] },
+        { x: 300, y: 70,  label: 'הצגת חבילה',       icon: '📦', isHotel: true },
+        { x: 190, y: 70,  label: 'בחירת חדר',        icon: '🏨', isHotel: true },
+        { x: 100, y: 140, label: 'תשלום',            icon: '💳' },
+        { x: 100, y: 230, label: 'אישור הזמנה',      icon: '✅' },
+        { x: 190, y: 310, label: 'צ׳ק-אין',          icon: '🎫' },
+        { x: 300, y: 310, label: 'כניסה למלון',       icon: '🏨', isHotel: true },
+      ],
+      edges: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9]]
+    },
+    {
+      id: 'conversational',
+      title: 'הצעה בשיחה',
+      subtitle: 'Conversational Offering',
+      desc: 'סוכן AI מנהל שיחה טבעית עם הלקוח בנושא הטיסה, מבין את הצרכים, ומעביר בצורה טבעית להצעת מלון מותאמת אישית.',
+      steps: [
+        'כניסה לאתר / אפליקציה',
+        'פתיחת צ׳אט עם סוכן AI',
+        'שאלות על הטיסה - יעד, תאריכים',
+        'בחירת טיסה מתוך הצ׳אט',
+        'AI מזהה צורך במלון ומציע',
+        'המלצת מלון בתוך השיחה',
+        'בחירת חדר',
+        'תשלום',
+        'אישור הזמנה',
+        'צ׳ק-אין ונסיעה'
+      ],
+      nodes: [
+        { x: 750, y: 60,  label: 'כניסה לאתר',        icon: '🌐' },
+        { x: 640, y: 60,  label: 'פתיחת צ׳אט',        icon: '💬' },
+        { x: 530, y: 120, label: 'שאלות על הטיסה',     icon: '❓' },
+        { x: 420, y: 180, label: 'בחירת טיסה',         icon: '✈' },
+        { x: 330, y: 110, label: 'סוכן AI',            icon: '🤖', isHub: true, hubDetails: ['ניתוח צרכים','התאמה אישית','הצגת אפשרויות'] },
+        { x: 220, y: 180, label: 'המלצת מלון',         icon: '🏨', isHotel: true },
+        { x: 130, y: 110, label: 'בחירת חדר',          icon: '🛏', isHotel: true },
+        { x: 60,  y: 180, label: 'תשלום',              icon: '💳' },
+        { x: 60,  y: 275, label: 'אישור הזמנה',        icon: '✅' },
+        { x: 160, y: 330, label: 'צ׳ק-אין ונסיעה',     icon: '🎫' },
+      ],
+      edges: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9]]
+    },
+    {
+      id: 'whatsapp',
+      title: 'הודעת WhatsApp',
+      subtitle: 'Post-checkout WhatsApp',
+      desc: 'לאחר השלמת הזמנת טיסה, הלקוח מקבל הודעת WhatsApp עם הצעת מלון מותאמת. AI מנתח את הנתונים ויוצר הצעה רלוונטית.',
+      steps: [
+        'חיפוש טיסה',
+        'בחירת טיסה',
+        'בחירת מושב',
+        'תשלום טיסה',
+        'אישור הזמנה',
+        'AI מעבד את פרטי ההזמנה',
+        'בניית הצעת מלון מותאמת',
+        'שליחת הודעת WhatsApp',
+        'צפייה בהצעה',
+        'הזמנת מלון',
+        'אישור הזמנת מלון'
+      ],
+      nodes: [
+        { x: 760, y: 55,  label: 'חיפוש טיסה',        icon: '🔍' },
+        { x: 650, y: 55,  label: 'בחירת טיסה',         icon: '✈' },
+        { x: 540, y: 55,  label: 'בחירת מושב',         icon: '💺' },
+        { x: 430, y: 55,  label: 'תשלום',              icon: '💳' },
+        { x: 320, y: 55,  label: 'אישור הזמנה',        icon: '✅' },
+        { x: 400, y: 180, label: 'עיבוד AI',           icon: '🤖', isHub: true },
+        { x: 280, y: 180, label: 'בניית הצעה',          icon: '🎯' },
+        { x: 280, y: 290, label: 'שליחת WhatsApp',      icon: '📱', isHotel: true },
+        { x: 160, y: 290, label: 'צפייה בהצעה',        icon: '👀' },
+        { x: 60,  y: 230, label: 'הזמנת מלון',         icon: '🏨', isHotel: true },
+        { x: 60,  y: 130, label: 'אישור מלון',         icon: '✅' },
+      ],
+      edges: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10]],
+      breakAfterEdge: 4  // visual break (dashed) after edge index 4
+    },
+    {
+      id: 'pretrip',
+      title: 'תזכורת לפני הטיסה',
+      subtitle: 'Pre-trip Reminder',
+      desc: 'ימים אחרי ההזמנה, הלקוח מקבל אימייל או הודעת Push עם שאלה: "עדיין צריכים מלון?" - AI מנתח דפוסי הזמנה וזמני שהייה.',
+      steps: [
+        'חיפוש וקניית טיסה',
+        'אישור הזמנת טיסה',
+        'ימים עוברים...',
+        'AI מנתח - עדיין ללא מלון?',
+        'בניית הצעה מותאמת',
+        'שליחת אימייל / Push',
+        'פתיחת ההודעה',
+        'צפייה בהצעות מלונות',
+        'בחירת מלון',
+        'הזמנה ואישור'
+      ],
+      nodes: [
+        { x: 760, y: 60,  label: 'קניית טיסה',         icon: '✈' },
+        { x: 650, y: 60,  label: 'אישור הזמנה',         icon: '✅' },
+        { x: 540, y: 60,  label: 'ימים עוברים',         icon: '📅', isDashed: true },
+        { x: 420, y: 130, label: 'ניתוח AI',           icon: '🤖', isHub: true },
+        { x: 420, y: 240, label: 'בניית הצעה',          icon: '🎯' },
+        { x: 300, y: 60,  label: 'תזכורת אימייל',       icon: '📧', isHotel: true },
+        { x: 300, y: 170, label: 'Push notification',   icon: '🔔', isHotel: true },
+        { x: 180, y: 120, label: 'צפייה בהצעות',        icon: '👀' },
+        { x: 80,  y: 60,  label: 'בחירת מלון',          icon: '🏨', isHotel: true },
+        { x: 80,  y: 170, label: 'הזמנה ואישור',        icon: '✅' },
+      ],
+      edges: [[0,1],[1,2],[2,3],[3,4],[3,5],[3,6],[4,7],[5,7],[6,7],[7,8],[8,9]],
+      breakAfterEdge: 1  // dashed line for "days pass"
+    }
+  ];
+
+  // ===== DOM REFS =====
+  const app = document.getElementById('app');
+  const topTabs = document.querySelectorAll('.top-tab');
+  const sections = document.querySelectorAll('.section');
+  const modelTabs = document.querySelectorAll('.model-tab');
+  const modelPanels = document.querySelectorAll('.model-panel');
+  const journeyTabBtns = document.querySelectorAll('.journey-tab');
+  const svg = document.getElementById('journeySvg');
+  const descPanel = document.getElementById('journeyDescPanel');
+
+  // ===== SECTION SWITCHING =====
+  function switchSection(sectionId) {
+    currentSection = sectionId;
+    topTabs.forEach(t => t.classList.toggle('active', t.dataset.section === sectionId));
+    sections.forEach(s => s.classList.toggle('active', s.id === 'sec-' + sectionId));
+    if (sectionId === 'journeys') renderJourney(currentJourney);
+  }
+
+  topTabs.forEach(tab => tab.addEventListener('click', () => switchSection(tab.dataset.section)));
+
+  // ===== MODEL SWITCHING =====
+  function switchModel(idx) {
+    currentModel = idx;
+    modelTabs.forEach(t => t.classList.toggle('active', parseInt(t.dataset.model) === idx));
+    modelPanels.forEach(p => p.classList.toggle('active', parseInt(p.dataset.panel) === idx));
+    updateComparisonBar(idx);
+  }
+
+  modelTabs.forEach(tab => tab.addEventListener('click', () => switchModel(parseInt(tab.dataset.model))));
+
+  // ===== COMPARISON BAR =====
+  // Heights map: 1=low(8px), 2=medium(18px), 3=high(28px)
+  const barHeights = { 1: 8, 2: 18, 3: 28 };
+  // Colors: low=green, medium=orange, high=red for risk metrics; inverse for positive metrics
+  const riskColors = { 1: '#38a169', 2: '#ed8936', 3: '#e53e3e' };
+  const goodColors = { 1: '#e53e3e', 2: '#ed8936', 3: '#38a169' };
+  // Which metrics are "bad when high" vs "good when high"
+  const metricPolarity = { tech: 'risk', pricing: 'good', financial: 'risk', ttl: 'risk' };
+
+  function updateComparisonBar(activeModel) {
+    const bar = document.getElementById('comparisonBar');
+    bar.querySelectorAll('.cb-metric').forEach(metricEl => {
+      const metric = metricEl.dataset.metric;
+      if (!metric) return;
+      const values = metrics[metric];
+      const colors = metricPolarity[metric] === 'risk' ? riskColors : goodColors;
+      metricEl.querySelectorAll('.cb-bar').forEach(barEl => {
+        const mIdx = parseInt(barEl.dataset.model);
+        const val = values[mIdx];
+        const fill = barEl.querySelector('.cb-bar-fill');
+        const isActive = mIdx === activeModel;
+        fill.style.height = barHeights[val] + 'px';
+        fill.style.background = isActive ? colors[val] : '#e2e8f0';
+        barEl.classList.toggle('active', isActive);
+      });
+    });
+  }
+  updateComparisonBar(0);
+
+  // ===== JOURNEY SWITCHING =====
+  function switchJourney(idx) {
+    currentJourney = idx;
+    journeyTabBtns.forEach(t => t.classList.toggle('active', parseInt(t.dataset.journey) === idx));
+    renderJourney(idx);
+  }
+
+  journeyTabBtns.forEach(tab => tab.addEventListener('click', () => switchJourney(parseInt(tab.dataset.journey))));
+
+  // ===== JOURNEY RENDERING =====
+  function renderJourney(idx) {
+    const data = journeyData[idx];
+    svg.innerHTML = '';
+
+    // Defs
+    const defs = svgEl('defs');
+    // Arrow marker
+    const marker = svgEl('marker', {id:'arrowHead',viewBox:'0 0 10 10',refX:'8',refY:'5',markerWidth:'6',markerHeight:'6',orient:'auto-start-reverse'});
+    marker.appendChild(svgEl('path',{d:'M 0 0 L 10 5 L 0 10 Z',fill:'#3182ce'}));
+    defs.appendChild(marker);
+    // Glow filter
+    const filter = svgEl('filter',{id:'glow',x:'-50%',y:'-50%',width:'200%',height:'200%'});
+    const feGaussian = svgEl('feGaussianBlur',{stdDeviation:'3',result:'coloredBlur'});
+    filter.appendChild(feGaussian);
+    const feMerge = svgEl('feMerge');
+    feMerge.appendChild(svgEl('feMergeNode',{in:'coloredBlur'}));
+    feMerge.appendChild(svgEl('feMergeNode',{in:'SourceGraphic'}));
+    filter.appendChild(feMerge);
+    defs.appendChild(filter);
+    svg.appendChild(defs);
+
+    // Background subtle grid
+    const bgGroup = svgEl('g',{opacity:'0.03'});
+    for(let i=0;i<840;i+=40){
+      bgGroup.appendChild(svgEl('line',{x1:i,y1:0,x2:i,y2:400,stroke:'#1a365d','stroke-width':'1'}));
+    }
+    for(let i=0;i<400;i+=40){
+      bgGroup.appendChild(svgEl('line',{x1:0,y1:i,x2:840,y2:i,stroke:'#1a365d','stroke-width':'1'}));
+    }
+    svg.appendChild(bgGroup);
+
+    // Draw edges
+    const edgeGroup = svgEl('g');
+    data.edges.forEach(([fromIdx, toIdx], edgeIdx) => {
+      const from = data.nodes[fromIdx];
+      const to = data.nodes[toIdx];
+      const path = createEdgePath(from, to, data, edgeIdx);
+      edgeGroup.appendChild(path);
+    });
+    svg.appendChild(edgeGroup);
+
+    // Draw nodes
+    const nodeGroup = svgEl('g');
+    data.nodes.forEach((node, nIdx) => {
+      const g = createNode(node, nIdx);
+      nodeGroup.appendChild(g);
+    });
+    svg.appendChild(nodeGroup);
+
+    // Legend
+    const legendG = svgEl('g', { transform: 'translate(720, 340)' });
+    // AI hub legend
+    legendG.appendChild(svgEl('circle', { cx: 0, cy: 0, r: 6, fill: '#1a365d', stroke: '#3182ce', 'stroke-width': '1.5' }));
+    const lbl1 = svgEl('text', { x: -12, y: 4, 'font-family': 'Heebo, sans-serif', 'font-size': '9', fill: '#4a5568', 'text-anchor': 'end' });
+    lbl1.textContent = 'סוכן AI';
+    legendG.appendChild(lbl1);
+    // Hotel legend
+    legendG.appendChild(svgEl('circle', { cx: 0, cy: 20, r: 6, fill: '#fffaf0', stroke: '#ed8936', 'stroke-width': '1.5' }));
+    const lbl2 = svgEl('text', { x: -12, y: 24, 'font-family': 'Heebo, sans-serif', 'font-size': '9', fill: '#4a5568', 'text-anchor': 'end' });
+    lbl2.textContent = 'נקודת מלון';
+    legendG.appendChild(lbl2);
+    // Regular legend
+    legendG.appendChild(svgEl('circle', { cx: 0, cy: 40, r: 6, fill: 'white', stroke: '#e2e8f0', 'stroke-width': '1.5' }));
+    const lbl3 = svgEl('text', { x: -12, y: 44, 'font-family': 'Heebo, sans-serif', 'font-size': '9', fill: '#4a5568', 'text-anchor': 'end' });
+    lbl3.textContent = 'שלב במסע';
+    legendG.appendChild(lbl3);
+    svg.appendChild(legendG);
+
+    // Update description panel
+    renderJourneyDesc(data);
+  }
+
+  function createEdgePath(from, to, journeyData, edgeIdx) {
+    const dx = to.x - from.x;
+    const dy = to.y - from.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+
+    // Shorten path to not overlap circles
+    const rFrom = from.isHub ? 30 : 22;
+    const rTo = to.isHub ? 30 : 22;
+    const angle = Math.atan2(dy, dx);
+    const sx = from.x + Math.cos(angle) * rFrom;
+    const sy = from.y + Math.sin(angle) * rFrom;
+    const ex = to.x - Math.cos(angle) * rTo;
+    const ey = to.y - Math.sin(angle) * rTo;
+
+    let d;
+    if (Math.abs(dy) < 15) {
+      // Horizontal - straight line
+      d = `M${sx},${sy} L${ex},${ey}`;
+    } else if (Math.abs(dx) < 15) {
+      // Vertical - straight line
+      d = `M${sx},${sy} L${ex},${ey}`;
+    } else {
+      // Curve
+      const cx = (from.x + to.x) / 2;
+      const cy = (from.y + to.y) / 2;
+      // Offset control point perpendicular to the line
+      const perpX = -(dy / dist) * 20;
+      const perpY = (dx / dist) * 20;
+      d = `M${sx},${sy} Q${cx + perpX},${cy + perpY} ${ex},${ey}`;
+    }
+
+    const isDashed = (journeyData.breakAfterEdge !== undefined && edgeIdx === journeyData.breakAfterEdge) ||
+                     (from.isDashed || to.isDashed);
+
+    const pathEl = svgEl('path', {
+      d: d,
+      fill: 'none',
+      stroke: isDashed ? '#a0aec0' : '#3182ce',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'marker-end': 'url(#arrowHead)',
+      opacity: isDashed ? '0.45' : '0.6'
+    });
+
+    if (isDashed) {
+      pathEl.setAttribute('stroke-dasharray', '6 5');
+    }
+
+    // Animate draw-in
+    if (!isDashed) {
+      requestAnimationFrame(() => {
+        try {
+          const realLength = pathEl.getTotalLength();
+          pathEl.style.strokeDasharray = realLength;
+          pathEl.style.strokeDashoffset = realLength;
+          pathEl.style.transition = `stroke-dashoffset 0.5s cubic-bezier(.4,0,.2,1) ${edgeIdx * 0.08 + 0.2}s`;
+          requestAnimationFrame(() => {
+            pathEl.style.strokeDashoffset = '0';
+          });
+        } catch(e) {}
+      });
+    }
+
+    return pathEl;
+  }
+
+  function createNode(node, idx) {
+    const g = svgEl('g', {
+      class: 'svg-node',
+      transform: `translate(${node.x}, ${node.y})`
+    });
+
+    const r = node.isHub ? 28 : (node.isHotel ? 22 : 20);
+
+    // Background glow for hub
+    if (node.isHub) {
+      const glowCircle = svgEl('circle', {
+        cx: 0, cy: 0, r: r + 8,
+        fill: 'rgba(49,130,206,0.1)',
+        stroke: 'none'
+      });
+      glowCircle.classList.add('ai-hub-pulse');
+      g.appendChild(glowCircle);
+    }
+
+    // Hotel highlight ring
+    if (node.isHotel) {
+      const ring = svgEl('circle', {
+        cx: 0, cy: 0, r: r + 4,
+        fill: 'none',
+        stroke: '#ed8936',
+        'stroke-width': '2',
+        'stroke-dasharray': '4 3',
+        opacity: '0.6'
+      });
+      g.appendChild(ring);
+    }
+
+    const circle = svgEl('circle', {
+      cx: 0, cy: 0, r: r,
+      fill: node.isHub ? '#1a365d' : (node.isHotel ? '#fffaf0' : 'white'),
+      stroke: node.isHub ? '#3182ce' : (node.isHotel ? '#ed8936' : '#e2e8f0'),
+      'stroke-width': node.isHub ? '3' : '2',
+      class: 'node-circle'
+    });
+    if (node.isHub) {
+      circle.setAttribute('filter', 'url(#glow)');
+    }
+    g.appendChild(circle);
+
+    // Icon
+    const iconText = svgEl('text', {
+      x: 0, y: 5,
+      'text-anchor': 'middle',
+      'dominant-baseline': 'central',
+      'font-size': node.isHub ? '16' : '13'
+    });
+    iconText.textContent = node.icon;
+    g.appendChild(iconText);
+
+    // Label below
+    const label = svgEl('text', {
+      x: 0, y: r + 14,
+      'text-anchor': 'middle',
+      'font-family': 'Heebo, sans-serif',
+      'font-size': node.isHub ? '10.5' : '9.5',
+      'font-weight': node.isHub ? '700' : '600',
+      fill: node.isHub ? '#1a365d' : '#4a5568',
+      direction: 'rtl'
+    });
+    label.textContent = node.label;
+    g.appendChild(label);
+
+    // Hub detail annotations (small italic labels showing what AI does internally)
+    if (node.hubDetails && node.hubDetails.length) {
+      const detailGroup = svgEl('g', { opacity: '0.55' });
+      node.hubDetails.forEach((detail, di) => {
+        const dy = r + 30 + di * 13;
+        const dt = svgEl('text', {
+          x: 0, y: dy,
+          'text-anchor': 'middle',
+          'font-family': 'Heebo, sans-serif',
+          'font-size': '8',
+          'font-style': 'italic',
+          'font-weight': '400',
+          fill: '#3182ce',
+          direction: 'rtl'
+        });
+        dt.textContent = detail;
+        detailGroup.appendChild(dt);
+      });
+      g.appendChild(detailGroup);
+    }
+
+    // Pop-in animation using opacity
+    g.style.opacity = '0';
+    const delay = idx * 0.07 + 0.1;
+    setTimeout(() => {
+      g.style.transition = `opacity 0.35s ease ${delay}s`;
+      g.style.opacity = '1';
+    }, 30);
+
+    return g;
+  }
+
+  function renderJourneyDesc(data) {
+    descPanel.innerHTML = `
+      <div class="journey-desc-title">${data.title}</div>
+      <div style="font-size:.72rem;color:var(--gray500);margin-bottom:10px;font-weight:500">${data.subtitle}</div>
+      <div class="journey-desc-text">${data.desc}</div>
+      <div style="font-size:.75rem;font-weight:600;color:var(--navy);margin-bottom:8px">שלבי המסע:</div>
+      <ol class="journey-desc-steps">
+        ${data.steps.map((s,i) => `<li><span class="step-num">${i+1}</span>${s}</li>`).join('')}
+      </ol>
+    `;
+    descPanel.style.animation = 'fadeIn .4s ease';
+  }
+
+  // ===== SVG HELPERS =====
+  function svgEl(tag, attrs) {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    if (attrs) Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k,v));
+    return el;
+  }
+
+  // ===== KEYBOARD NAVIGATION =====
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'f' || e.key === 'F') {
+      if(!e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        toggleFullscreen();
+      }
+    }
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      if (currentSection === 'models') {
+        const dir = e.key === 'ArrowRight' ? -1 : 1; // RTL
+        const next = Math.max(0, Math.min(2, currentModel + dir));
+        switchModel(next);
+      } else {
+        const dir = e.key === 'ArrowRight' ? -1 : 1;
+        const next = Math.max(0, Math.min(3, currentJourney + dir));
+        switchJourney(next);
+      }
+    }
+    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      switchSection(currentSection === 'models' ? 'journeys' : 'models');
+    }
+  });
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      app.requestFullscreen?.() || app.webkitRequestFullscreen?.();
+    } else {
+      document.exitFullscreen?.() || document.webkitExitFullscreen?.();
+    }
+  }
+
+  // ===== INIT =====
+  updateComparisonBar(0);
+})();
+</script>
+</body>
+</html>
