@@ -278,6 +278,7 @@ body{font-family:'Heebo',system-ui,-apple-system,sans-serif;background:#f7fafc;c
     </div>
     <div class="top-tabs" id="topTabs">
       <button class="top-tab active" data-section="models">שרשרת ערך - מודלים</button>
+      <button class="top-tab" data-section="vanilla">מסעות לקוח קיימים</button>
       <button class="top-tab" data-section="journeys">מסעות לקוח - AI</button>
     </div>
   </header>
@@ -576,7 +577,33 @@ body{font-family:'Heebo',system-ui,-apple-system,sans-serif;background:#f7fafc;c
       </div>
     </div>
 
-    <!-- SECTION 2: JOURNEYS -->
+    <!-- SECTION 2: VANILLA JOURNEYS -->
+    <div class="section" id="sec-vanilla">
+      <div class="journeys-layout">
+        <div class="journey-tabs" id="vanillaTabs">
+          <button class="journey-tab active" data-vanilla="0">
+            <div class="journey-tab-name">מיקור ישיר</div>
+            <div class="journey-tab-sub">Direct Sourcing</div>
+          </button>
+          <button class="journey-tab" data-vanilla="1">
+            <div class="journey-tab-name">ממשק צד שלישי</div>
+            <div class="journey-tab-sub">Third Party API</div>
+          </button>
+          <button class="journey-tab" data-vanilla="2">
+            <div class="journey-tab-name">ממשק ישיר</div>
+            <div class="journey-tab-sub">Direct API</div>
+          </button>
+        </div>
+        <div class="journey-content">
+          <div class="journey-svg-area" id="vanillaSvgArea">
+            <svg id="vanillaSvg" viewBox="0 0 840 400" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+          <div class="journey-desc-panel" id="vanillaDescPanel"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: JOURNEYS -->
     <div class="section" id="sec-journeys">
       <div class="journeys-layout">
         <div class="journey-tabs" id="journeyTabs">
@@ -620,6 +647,7 @@ body{font-family:'Heebo',system-ui,-apple-system,sans-serif;background:#f7fafc;c
   // ===== STATE =====
   let currentSection = 'models';
   let currentModel = 0;
+  let currentVanilla = 0;
   let currentJourney = 0;
 
   // ===== DATA =====
@@ -763,15 +791,120 @@ body{font-family:'Heebo',system-ui,-apple-system,sans-serif;background:#f7fafc;c
     }
   ];
 
+  // ===== VANILLA JOURNEY DATA =====
+  const vanillaData = [
+    {
+      id: 'vanilla-direct',
+      title: 'מיקור ישיר',
+      subtitle: 'Direct Sourcing — מסע לקוח קיים',
+      desc: 'הלקוח מזמין טיסה ומקבל הצעת מלון מתוך מלאי המלונות של החברה. ההצעה מוצגת כחלק מתהליך ההזמנה הסטנדרטי, ללא התאמה אישית מבוססת AI.',
+      steps: [
+        'כניסה לאתר / אפליקציה',
+        'חיפוש טיסה - יעד ותאריכים',
+        'בחירת טיסה ומושב',
+        'תשלום טיסה',
+        'אישור הזמנת טיסה',
+        'הצגת באנר "הוסיפו מלון"',
+        'דפדוף בקטלוג מלונות',
+        'בחירת מלון וחדר',
+        'תשלום נוסף למלון',
+        'אישור הזמנת מלון'
+      ],
+      nodes: [
+        { x: 760, y: 60,  label: 'כניסה לאתר',       icon: '🌐' },
+        { x: 650, y: 60,  label: 'חיפוש טיסה',        icon: '🔍' },
+        { x: 540, y: 60,  label: 'בחירת טיסה',        icon: '✈' },
+        { x: 430, y: 60,  label: 'תשלום טיסה',        icon: '💳' },
+        { x: 320, y: 60,  label: 'אישור טיסה',        icon: '✅' },
+        { x: 320, y: 170, label: 'באנר "הוסיפו מלון"', icon: '🏷', isHotel: true },
+        { x: 210, y: 170, label: 'קטלוג מלונות',       icon: '📋', isHotel: true },
+        { x: 100, y: 170, label: 'בחירת חדר',          icon: '🏨', isHotel: true },
+        { x: 100, y: 280, label: 'תשלום מלון',         icon: '💳' },
+        { x: 210, y: 280, label: 'אישור מלון',         icon: '✅' },
+      ],
+      edges: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9]],
+      breakAfterEdge: 4
+    },
+    {
+      id: 'vanilla-thirdparty',
+      title: 'ממשק צד שלישי',
+      subtitle: 'Third Party API — מסע לקוח קיים',
+      desc: 'הלקוח מזמין טיסה ומועבר לממשק של ספק צד שלישי (כגון Booking.com או Expedia) לחיפוש והזמנת מלון. החוויה מפוצלת בין אתר החברה לאתר הספק.',
+      steps: [
+        'כניסה לאתר / אפליקציה',
+        'חיפוש טיסה - יעד ותאריכים',
+        'בחירת טיסה ותשלום',
+        'אישור הזמנת טיסה',
+        'קישור "הזמינו מלון" → ספק חיצוני',
+        'מעבר לאתר הספק',
+        'חיפוש מלון באתר הספק',
+        'בחירת מלון וחדר',
+        'תשלום באתר הספק',
+        'אישור מהספק + מייל נפרד'
+      ],
+      nodes: [
+        { x: 760, y: 60,  label: 'כניסה לאתר',         icon: '🌐' },
+        { x: 650, y: 60,  label: 'חיפוש טיסה',          icon: '🔍' },
+        { x: 540, y: 60,  label: 'טיסה + תשלום',        icon: '✈' },
+        { x: 430, y: 60,  label: 'אישור טיסה',          icon: '✅' },
+        { x: 430, y: 160, label: 'קישור לספק',          icon: '🔗', isDashed: true },
+        { x: 320, y: 160, label: 'אתר הספק',            icon: '🌍', isHotel: true },
+        { x: 210, y: 160, label: 'חיפוש מלון',          icon: '🔍', isHotel: true },
+        { x: 100, y: 160, label: 'בחירת חדר',           icon: '🏨', isHotel: true },
+        { x: 100, y: 270, label: 'תשלום בספק',          icon: '💳' },
+        { x: 210, y: 270, label: 'אישור נפרד',          icon: '📧' },
+      ],
+      edges: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9]],
+      breakAfterEdge: 3
+    },
+    {
+      id: 'vanilla-directapi',
+      title: 'ממשק ישיר',
+      subtitle: 'Direct API — מסע לקוח קיים',
+      desc: 'הלקוח מזמין טיסה ומקבל הצעות מלונות ממקורות מרובים דרך ממשקים ישירים. התוצאות מוצגות באתר החברה אך ללא אופטימיזציה חכמה - רשימה סטנדרטית ממוינת לפי מחיר.',
+      steps: [
+        'כניסה לאתר / אפליקציה',
+        'חיפוש טיסה - יעד ותאריכים',
+        'בחירת טיסה ותשלום',
+        'אישור הזמנת טיסה',
+        'הצגת עמוד מלונות',
+        'שליפת מלונות מספקים שונים',
+        'רשימת מלונות ממוינת לפי מחיר',
+        'בחירת מלון וחדר',
+        'תשלום דרך האתר',
+        'אישור הזמנת מלון'
+      ],
+      nodes: [
+        { x: 760, y: 60,  label: 'כניסה לאתר',         icon: '🌐' },
+        { x: 650, y: 60,  label: 'חיפוש טיסה',          icon: '🔍' },
+        { x: 540, y: 60,  label: 'טיסה + תשלום',        icon: '✈' },
+        { x: 430, y: 60,  label: 'אישור טיסה',          icon: '✅' },
+        { x: 430, y: 160, label: 'עמוד מלונות',          icon: '🏨', isHotel: true },
+        { x: 320, y: 100, label: 'ספק A',               icon: '🔌', isSmall: true },
+        { x: 320, y: 160, label: 'ספק B',               icon: '🔌', isSmall: true },
+        { x: 320, y: 220, label: 'ספק C',               icon: '🔌', isSmall: true },
+        { x: 200, y: 160, label: 'רשימת תוצאות',        icon: '📋', isHotel: true },
+        { x: 100, y: 100, label: 'בחירת חדר',           icon: '🛏', isHotel: true },
+        { x: 100, y: 220, label: 'תשלום',               icon: '💳' },
+        { x: 200, y: 280, label: 'אישור מלון',          icon: '✅' },
+      ],
+      edges: [[0,1],[1,2],[2,3],[3,4],[4,5],[4,6],[4,7],[5,8],[6,8],[7,8],[8,9],[9,10],[10,11]],
+      breakAfterEdge: 3
+    }
+  ];
+
   // ===== DOM REFS =====
   const app = document.getElementById('app');
   const topTabs = document.querySelectorAll('.top-tab');
   const sections = document.querySelectorAll('.section');
   const modelTabs = document.querySelectorAll('.model-tab');
   const modelPanels = document.querySelectorAll('.model-panel');
-  const journeyTabBtns = document.querySelectorAll('.journey-tab');
+  const journeyTabBtns = document.querySelectorAll('#journeyTabs .journey-tab');
+  const vanillaTabBtns = document.querySelectorAll('#vanillaTabs .journey-tab');
   const svg = document.getElementById('journeySvg');
+  const vanillaSvg = document.getElementById('vanillaSvg');
   const descPanel = document.getElementById('journeyDescPanel');
+  const vanillaDescPanel = document.getElementById('vanillaDescPanel');
 
   // ===== SECTION SWITCHING =====
   function switchSection(sectionId) {
@@ -779,6 +912,7 @@ body{font-family:'Heebo',system-ui,-apple-system,sans-serif;background:#f7fafc;c
     topTabs.forEach(t => t.classList.toggle('active', t.dataset.section === sectionId));
     sections.forEach(s => s.classList.toggle('active', s.id === 'sec-' + sectionId));
     if (sectionId === 'journeys') renderJourney(currentJourney);
+    if (sectionId === 'vanilla') renderVanillaJourney(currentVanilla);
   }
 
   topTabs.forEach(tab => tab.addEventListener('click', () => switchSection(tab.dataset.section)));
@@ -830,6 +964,15 @@ body{font-family:'Heebo',system-ui,-apple-system,sans-serif;background:#f7fafc;c
   }
 
   journeyTabBtns.forEach(tab => tab.addEventListener('click', () => switchJourney(parseInt(tab.dataset.journey))));
+
+  // ===== VANILLA JOURNEY SWITCHING =====
+  function switchVanilla(idx) {
+    currentVanilla = idx;
+    vanillaTabBtns.forEach(t => t.classList.toggle('active', parseInt(t.dataset.vanilla) === idx));
+    renderVanillaJourney(idx);
+  }
+
+  vanillaTabBtns.forEach(tab => tab.addEventListener('click', () => switchVanilla(parseInt(tab.dataset.vanilla))));
 
   // ===== JOURNEY RENDERING =====
   function renderJourney(idx) {
@@ -1082,6 +1225,199 @@ body{font-family:'Heebo',system-ui,-apple-system,sans-serif;background:#f7fafc;c
     descPanel.style.animation = 'fadeIn .4s ease';
   }
 
+  // ===== VANILLA JOURNEY RENDERING =====
+  function renderVanillaJourney(idx) {
+    const data = vanillaData[idx];
+    vanillaSvg.innerHTML = '';
+
+    // Defs
+    const defs = svgEl('defs');
+    const marker = svgEl('marker', {id:'vArrowHead',viewBox:'0 0 10 10',refX:'8',refY:'5',markerWidth:'6',markerHeight:'6',orient:'auto-start-reverse'});
+    marker.appendChild(svgEl('path',{d:'M 0 0 L 10 5 L 0 10 Z',fill:'#718096'}));
+    defs.appendChild(marker);
+    const filter = svgEl('filter',{id:'vGlow',x:'-50%',y:'-50%',width:'200%',height:'200%'});
+    const feGaussian = svgEl('feGaussianBlur',{stdDeviation:'3',result:'coloredBlur'});
+    filter.appendChild(feGaussian);
+    const feMerge = svgEl('feMerge');
+    feMerge.appendChild(svgEl('feMergeNode',{in:'coloredBlur'}));
+    feMerge.appendChild(svgEl('feMergeNode',{in:'SourceGraphic'}));
+    filter.appendChild(feMerge);
+    defs.appendChild(filter);
+    vanillaSvg.appendChild(defs);
+
+    // Background grid
+    const bgGroup = svgEl('g',{opacity:'0.03'});
+    for(let i=0;i<840;i+=40){
+      bgGroup.appendChild(svgEl('line',{x1:i,y1:0,x2:i,y2:400,stroke:'#1a365d','stroke-width':'1'}));
+    }
+    for(let i=0;i<400;i+=40){
+      bgGroup.appendChild(svgEl('line',{x1:0,y1:i,x2:840,y2:i,stroke:'#1a365d','stroke-width':'1'}));
+    }
+    vanillaSvg.appendChild(bgGroup);
+
+    // Draw edges
+    const edgeGroup = svgEl('g');
+    data.edges.forEach(([fromIdx, toIdx], edgeIdx) => {
+      const from = data.nodes[fromIdx];
+      const to = data.nodes[toIdx];
+      const path = createVanillaEdgePath(from, to, data, edgeIdx);
+      edgeGroup.appendChild(path);
+    });
+    vanillaSvg.appendChild(edgeGroup);
+
+    // Draw nodes
+    const nodeGroup = svgEl('g');
+    data.nodes.forEach((node, nIdx) => {
+      const g = createVanillaNode(node, nIdx);
+      nodeGroup.appendChild(g);
+    });
+    vanillaSvg.appendChild(nodeGroup);
+
+    // Legend
+    const legendG = svgEl('g', { transform: 'translate(720, 340)' });
+    legendG.appendChild(svgEl('circle', { cx: 0, cy: 0, r: 6, fill: '#fffaf0', stroke: '#ed8936', 'stroke-width': '1.5' }));
+    const lbl1 = svgEl('text', { x: -12, y: 4, 'font-family': 'Heebo, sans-serif', 'font-size': '9', fill: '#4a5568', 'text-anchor': 'end' });
+    lbl1.textContent = 'נקודת מלון';
+    legendG.appendChild(lbl1);
+    legendG.appendChild(svgEl('circle', { cx: 0, cy: 20, r: 6, fill: 'white', stroke: '#e2e8f0', 'stroke-width': '1.5' }));
+    const lbl2 = svgEl('text', { x: -12, y: 24, 'font-family': 'Heebo, sans-serif', 'font-size': '9', fill: '#4a5568', 'text-anchor': 'end' });
+    lbl2.textContent = 'שלב במסע';
+    legendG.appendChild(lbl2);
+    vanillaSvg.appendChild(legendG);
+
+    // Update description panel
+    vanillaDescPanel.innerHTML = `
+      <div class="journey-desc-title">${data.title}</div>
+      <div style="font-size:.72rem;color:var(--gray500);margin-bottom:10px;font-weight:500">${data.subtitle}</div>
+      <div class="journey-desc-text">${data.desc}</div>
+      <div style="font-size:.75rem;font-weight:600;color:var(--navy);margin-bottom:8px">שלבי המסע:</div>
+      <ol class="journey-desc-steps">
+        ${data.steps.map((s,i) => `<li><span class="step-num">${i+1}</span>${s}</li>`).join('')}
+      </ol>
+    `;
+    vanillaDescPanel.style.animation = 'fadeIn .4s ease';
+  }
+
+  function createVanillaEdgePath(from, to, data, edgeIdx) {
+    const dx = to.x - from.x;
+    const dy = to.y - from.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+
+    const rFrom = from.isSmall ? 14 : 20;
+    const rTo = to.isSmall ? 14 : 20;
+    const angle = Math.atan2(dy, dx);
+    const sx = from.x + Math.cos(angle) * rFrom;
+    const sy = from.y + Math.sin(angle) * rFrom;
+    const ex = to.x - Math.cos(angle) * rTo;
+    const ey = to.y - Math.sin(angle) * rTo;
+
+    let d;
+    if (Math.abs(dy) < 15) {
+      d = `M${sx},${sy} L${ex},${ey}`;
+    } else if (Math.abs(dx) < 15) {
+      d = `M${sx},${sy} L${ex},${ey}`;
+    } else {
+      const cx = (from.x + to.x) / 2;
+      const cy = (from.y + to.y) / 2;
+      const perpX = -(dy / dist) * 20;
+      const perpY = (dx / dist) * 20;
+      d = `M${sx},${sy} Q${cx + perpX},${cy + perpY} ${ex},${ey}`;
+    }
+
+    const isDashed = (data.breakAfterEdge !== undefined && edgeIdx === data.breakAfterEdge) ||
+                     (from.isDashed || to.isDashed);
+
+    const pathEl = svgEl('path', {
+      d: d,
+      fill: 'none',
+      stroke: isDashed ? '#a0aec0' : '#718096',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'marker-end': 'url(#vArrowHead)',
+      opacity: isDashed ? '0.45' : '0.5'
+    });
+
+    if (isDashed) {
+      pathEl.setAttribute('stroke-dasharray', '6 5');
+    }
+
+    if (!isDashed) {
+      requestAnimationFrame(() => {
+        try {
+          const realLength = pathEl.getTotalLength();
+          pathEl.style.strokeDasharray = realLength;
+          pathEl.style.strokeDashoffset = realLength;
+          pathEl.style.transition = `stroke-dashoffset 0.5s cubic-bezier(.4,0,.2,1) ${edgeIdx * 0.08 + 0.2}s`;
+          requestAnimationFrame(() => {
+            pathEl.style.strokeDashoffset = '0';
+          });
+        } catch(e) {}
+      });
+    }
+
+    return pathEl;
+  }
+
+  function createVanillaNode(node, idx) {
+    const g = svgEl('g', {
+      class: 'svg-node',
+      transform: `translate(${node.x}, ${node.y})`
+    });
+
+    const r = node.isSmall ? 16 : 20;
+
+    if (node.isHotel) {
+      const ring = svgEl('circle', {
+        cx: 0, cy: 0, r: r + 4,
+        fill: 'none',
+        stroke: '#ed8936',
+        'stroke-width': '2',
+        'stroke-dasharray': '4 3',
+        opacity: '0.6'
+      });
+      g.appendChild(ring);
+    }
+
+    const circle = svgEl('circle', {
+      cx: 0, cy: 0, r: r,
+      fill: node.isHotel ? '#fffaf0' : 'white',
+      stroke: node.isHotel ? '#ed8936' : '#e2e8f0',
+      'stroke-width': '2',
+      class: 'node-circle'
+    });
+    g.appendChild(circle);
+
+    const iconText = svgEl('text', {
+      x: 0, y: 5,
+      'text-anchor': 'middle',
+      'dominant-baseline': 'central',
+      'font-size': node.isSmall ? '11' : '13'
+    });
+    iconText.textContent = node.icon;
+    g.appendChild(iconText);
+
+    const label = svgEl('text', {
+      x: 0, y: r + 14,
+      'text-anchor': 'middle',
+      'font-family': 'Heebo, sans-serif',
+      'font-size': '9.5',
+      'font-weight': '600',
+      fill: '#4a5568',
+      direction: 'rtl'
+    });
+    label.textContent = node.label;
+    g.appendChild(label);
+
+    g.style.opacity = '0';
+    const delay = idx * 0.07 + 0.1;
+    setTimeout(() => {
+      g.style.transition = `opacity 0.35s ease ${delay}s`;
+      g.style.opacity = '1';
+    }, 30);
+
+    return g;
+  }
+
   // ===== SVG HELPERS =====
   function svgEl(tag, attrs) {
     const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
@@ -1099,19 +1435,25 @@ body{font-family:'Heebo',system-ui,-apple-system,sans-serif;background:#f7fafc;c
     }
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
       e.preventDefault();
+      const dir = e.key === 'ArrowRight' ? -1 : 1; // RTL
       if (currentSection === 'models') {
-        const dir = e.key === 'ArrowRight' ? -1 : 1; // RTL
         const next = Math.max(0, Math.min(2, currentModel + dir));
         switchModel(next);
+      } else if (currentSection === 'vanilla') {
+        const next = Math.max(0, Math.min(2, currentVanilla + dir));
+        switchVanilla(next);
       } else {
-        const dir = e.key === 'ArrowRight' ? -1 : 1;
         const next = Math.max(0, Math.min(3, currentJourney + dir));
         switchJourney(next);
       }
     }
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
       e.preventDefault();
-      switchSection(currentSection === 'models' ? 'journeys' : 'models');
+      const sectionOrder = ['models', 'vanilla', 'journeys'];
+      const curIdx = sectionOrder.indexOf(currentSection);
+      const dir = e.key === 'ArrowDown' ? 1 : -1;
+      const nextIdx = Math.max(0, Math.min(sectionOrder.length - 1, curIdx + dir));
+      switchSection(sectionOrder[nextIdx]);
     }
   });
 
